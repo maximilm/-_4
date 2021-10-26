@@ -10,8 +10,9 @@ class RandomTreeSearch
 {
 private: 
 	Knot* root = nullptr;
-	int rotateCount = 0;
 public:
+	int rotateCount = 0;
+	long srv = 0;
 	void createTree();
 	Knot* getRoot();
 	void setRoot(Knot* root);

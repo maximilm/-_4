@@ -80,12 +80,14 @@ void RandomTreeSearch::createTree() {
 	Polis* p2 = new Polis;
 	int numInFile = 0;
 	bf.read((char*)p2, sizeof(Polis));
-	root = insert(root, p2->getNum(), p2->getNumInFile());
+	int num = atoi((p2->getNum()).c_str());
+	root = insert(root,num, p2->getNumInFile());
 	bf.read((char*)p2, sizeof(Polis));
 	while (numInFile != p2->getNumInFile())
 	{
 		numInFile = p2->getNumInFile();
-		insert(root, p2->getNum(), p2->getNumInFile());
+		num = atoi((p2->getNum()).c_str());
+		insert(root,num, p2->getNumInFile());
 		bf.read((char*)p2, sizeof(Polis));
 	}
 	cout << "Количество поворотов: " << rotateCount;
@@ -122,7 +124,8 @@ Knot* RandomTreeSearch::join(Knot* small, Knot* big) {
 	}
 }
 Knot* RandomTreeSearch::knotDelete(Knot* k, int key) {
-	if (!k) return k;
+	if (!k) 
+		return k;
 	if (k->num == key)
 	{
 		Knot* q = join(k->left, k->right);
@@ -137,12 +140,16 @@ Knot* RandomTreeSearch::knotDelete(Knot* k, int key) {
 }
 Knot* RandomTreeSearch::find(Knot* root, int key) {
 	if (root != nullptr) {
+		srv++;
 		if ((*root).num == key)
 			return root;
-		else if (key > (*root).num)
-			return find((*root).right, key);
-		else
-			return find((*root).left, key);
+		else {
+			srv++;
+			if (key > (*root).num)
+				return find((*root).right, key);
+			else
+				return find((*root).left, key);
+		}
 	}
 	return nullptr;
 }

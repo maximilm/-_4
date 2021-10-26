@@ -17,8 +17,8 @@ public:
 	}
 	Polis() {
 	}
-	int getNum() {
-		return num;
+	string getNum() {
+		return to_string(num);
 	}
 	long getNumInFile() {
 		return numInFile;
@@ -34,5 +34,19 @@ public:
 		for (int i = 0; i < 6; i++)
 			k = k + surname[i];
 		return k;
+	}
+	void setNumInFile(int num) {
+		this->num = num;
+	}
+	void setNum(int num) {
+		this->num = num;
+	}
+	void setKmp(string newKmp) {
+		for (int i = 0; i < 4; i++)
+			kmp[i] = newKmp[i];
+	}
+	void setSurname(string newSurname) {
+		for (int i = 0; i < 6; i++)
+			surname[i] = newSurname[i];
 	}
 };

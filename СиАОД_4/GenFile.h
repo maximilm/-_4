@@ -12,3 +12,4 @@ using namespace std;
 	Polis findInFile(long numInFile);
 	void insertInFile(ofstream& f, ofstream& fb, string num, string cmp, string surname, int numInFile);
 	void deletePolisInBinTxt(long numInFile);
+	void genBINfile(int n);

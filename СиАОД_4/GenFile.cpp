@@ -21,6 +21,32 @@ void genFile(int n) { // функция заполнения файла записями
 	f.close();
 	fb.close();
 }
+void genBINfile(int n) {
+	ifstream f;
+	ofstream fb;
+	int num;
+	fb.open("polisaBIN.dat", ios::binary);
+	f.open("polisa.txt");
+	int numberRecords = 0, j = 0;
+	string stringInFile;
+	string* del = new string[3]; // массив для трех строк - номер, компания, фамилия
+	while (!f.eof()) {
+		numberRecords++;
+		getline(f, stringInFile);
+		while (stringInFile.find("/") != -1)
+		{
+			del[j] = stringInFile.substr(0, stringInFile.find("/"));
+			stringInFile.erase(0, stringInFile.find("/") + 1);
+			j++;
+		}
+		num = atoi(del[0].c_str());
+		Polis* p = new Polis(num, del[1], del[2], numberRecords);
+		fb.write((char*)p, sizeof(Polis));
+		j = 0;
+	}
+	f.close();
+	fb.close();
+}
 void insertInFile(ofstream& f, ofstream& fb, string num, string cmp, string surname, int numInFile) {
 	f << endl << num << "/" << cmp << "/" << surname << "/";
 	int num2 = atoi(num.c_str());
@@ -54,52 +80,41 @@ Polis findInFile(long numInFile) {
 	bf.close();
 	return p2;
 }
+
 void deletePolisInBinTxt(long numInFile) {
 	ifstream f1("Polisa.txt"); // чтение 
-	ifstream bf("polisaBIN.dat", ios::in | ios::binary); // чтение 
-	ofstream bf2("HelpBin.dat", ios::binary); // запись
 	ofstream f2("Help.txt"); // запись
 	string q, q1;
 	Polis itg = findInFile(numInFile);
-	Polis* it = &itg;
-	Polis p2;
-	q1 = (*it).getNum() + "/" + (*it).getKmp() + "/" + (*it).getSurname() + "/"; // строка, которую нужно удалить 
+	bool flag = false;
+	q1 = itg.getNum() + "/" + itg.getKmp() + "/" + itg.getSurname() + "/"; // строка, которую нужно удалить 
 	getline(f1, q); // строка из файла
-	bf.read((char*)&p2, sizeof(Polis));
-	if (q != q1) {
+	if (q != q1) 
 		f2 << q;
-		bf2.write((char*)&p2, sizeof(Polis));
-	}
+	else 
+		flag = true;
 	while (!f1.eof())
 	{
 		getline(f1, q);
-		bf.read((char*)&p2, sizeof(Polis));
-		if (q != q1) {
-			f2 << endl << q;
-			bf2.write((char*)&p2, sizeof(Polis));
-		}
+		if (q != q1) 
+			if (flag) {
+				f2 << q;
+				flag = false;
+			}
+			else
+				f2 << endl << q;
 	}
 	f1.close();
 	f2.close();
-	bf.close();
-	bf2.close();
 	f1.open("Help.txt");
 	f2.open("Polisa.txt");
-	bf.open("HelpBin.dat");
-	bf2.open("PolisaBIN.dat");
 	getline(f1, q);
-	bf.read((char*)&p2, sizeof(Polis));
 	f2 << q;
-	bf2.write((char*)&p2, sizeof(Polis));
 	while (!f1.eof())
 	{
 		getline(f1, q);
-		bf.read((char*)&p2, sizeof(Polis));
 		f2 << endl << q;
-		bf2.write((char*)&p2, sizeof(Polis));
 	}
 	f1.close();
 	f2.close();
-	bf.close();
-	bf2.close();
 }

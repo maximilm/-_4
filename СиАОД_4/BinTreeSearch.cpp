@@ -17,12 +17,14 @@ void BinTreeSearch::insert(Knot** k, int key, long numInFile) {
 void  BinTreeSearch::createTree(Knot** root) {
 	ifstream bf("polisaBIN.dat", ios::in | ios::binary);
 	Polis *p2 = new Polis;
+	int num;
 	int numInFile = -1;
 	bf.read((char*)p2, sizeof(Polis));
 	while (numInFile != p2->getNumInFile())
 	{
 		numInFile = p2->getNumInFile();
-		insert(root, p2->getNum(), p2->getNumInFile());
+		num = atoi(p2->getNum().c_str());
+		insert(root, num, p2->getNumInFile());
 		bf.read((char*)p2, sizeof(Polis));
 	}
 	bf.close();
@@ -101,12 +103,17 @@ void BinTreeSearch::knotDelete(Knot** k, int key) {
 Knot* BinTreeSearch::find(Knot* root, int key)
 {
 	if (root != nullptr) {
+		srv++;
 		if ((*root).num == key)
 			return root;
-		else if (key > (*root).num)
-			return find((*root).right, key);
 		else
-			return find((*root).left, key);
+		{
+			srv++;
+			if (key > (*root).num)
+				return find((*root).right, key);
+			else
+				return find((*root).left, key);
+		}
 	}
 	return nullptr;
 }
